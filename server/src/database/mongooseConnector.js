@@ -8,7 +8,7 @@ const Database = 'uplanner';
 mongoose.connect(`mongodb://${Server}/${Database}`, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() =>console.log(`Sucesso ao conectar com a Database ${Database} - MONGO`))
     .catch(err => {
-        console.log('Falha ao conectar com a Database MONGO.');
+        console.log('Falha ao conectar com a database MONGO.');
         console.log(`error: ${err}`);
     });
 
