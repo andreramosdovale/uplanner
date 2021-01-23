@@ -1,11 +1,8 @@
-const { Router } = require('express');
-const routes = Router();
-// const DevController = require('./controllers/DevController');
-// const SearchController = require('./controllers/SearchController');
-// routes.get('/devs', DevController.index);
-// routes.post('/devs', DevController.store);
-// routes.get('/search', SearchController.index);
+const express = require('express');
+const routes = express.Router();
 
+const AuthController = require('./controllers/AuthController.js')
 
+routes.post('/auth/createUser', AuthController.createUser)
 
 module.exports = routes;
