@@ -1,4 +1,7 @@
+const { SECRET } = process.env
+const jwt = require('jsonwebtoken')
 const firebase = require("firebase/app");
+const User = require('../controllers/UserController')
 require("firebase/auth");
 
 const firebaseConfig = {
@@ -18,28 +21,31 @@ module.exports.SignUpWithEmailAndPassword = (email, password) => {
     .then((user) => {
         return user
     })
-    .catch((error) => {
+    .catch((err) => {
         let errorCode = error.code
         let errorMesssage = error.message
         if(errorCode == 'auth/weak-password') {
-            return {error: 'Senha muito fraca'}
+            return {err: 'Senha muito fraca'}
         } else {
-            return {error: errorMesssage}
+            return {err: errorMesssage}
         }
     })
 }
 
 module.exports.SignInWithEmailAndPassword = (email, password) => {
     return fb.auth().signInWithEmailAndPassword(email, password)
-        .catch(function(error) {
-            let errorCode = error.code
-            let errorMessage = error.message
+        .then((id) => {
+            return id
+        })
+        .catch(function(err) {
+            let errorCode = err.code;
+            let errorMessage = err.message;
             if (errorCode === 'auth/wrong-password') {
-                return {err: 'Wrong password.'}
+                return {err: 'Senha Incorreta'}
             } else {
                 return {err: errorMessage}
             }
-        })
+        });
 }
 
 return module.exports

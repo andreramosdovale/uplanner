@@ -2,8 +2,8 @@ require('dotenv').config()
 
 const express = require('express')
 const bodyParser = require('body-parser')
-const firebase = require('firebase')
 const routes = require('./routes')
+
 const app = express()
 const { PORT } = process.env
 
@@ -19,15 +19,5 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(routes)
-
-// let userLogged;
-//
-// firebase.auth().onAuthStateChanged((user) => {
-//     if(user){
-//         userLogged = user
-//     } else {
-//         userLogged = null
-//     }
-// })
 
 app.listen(PORT, () => console.log(`Server rodando na porta - ${PORT}`))

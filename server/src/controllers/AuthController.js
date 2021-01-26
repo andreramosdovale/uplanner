@@ -1,15 +1,19 @@
-const Auth = require('../auth/firebase');
+const Auth = require('../auth/firebase')
+const User = require('../controllers/UserController')
+const moment = require('moment')
 
 module.exports = {
     async createUser(req, res) {
         Auth.SignUpWithEmailAndPassword(req.body.email, req.body.password)
             .then((user) => {
                 if(!user.err){
-                    console.log('user -> ',user)
-                    let userData = JSON.parse(user)
-                    userData = userData.user
-                    console.log('data -> ',userData);
-                    return res.send(userData).statusCode('400')
+                    User.createUser(user.user.uid, user.user.email, new Date())
+                        .then(() => {
+                            return res.status(200).json('Cadastro Efetuado');
+                        })
+                        .catch((err) => {
+                            console.error(err)
+                        })
                 }else{
                     return user.err
                 }
@@ -23,9 +27,21 @@ module.exports = {
         Auth.SignInWithEmailAndPassword(req.body.email, req.body.password)
             .then((login) => {
                 if(!login.err){
-                    return res.send('deu certo')
-                } else {
-                    return login.err
+                    User.createJWT(login.user.uid, login.user.email)
+                        .then((token) => {
+                            User.saveJWT(token, login.user.uid)
+                                .then(() => {
+                                    return res.status(200).json(token);
+                                })
+                                .catch((err) => {
+                                    console.error(err)
+                                })
+                        })
+                        .catch((err) => {
+                            console.error(err)
+                        })
+                }else{
+                    return res.json('Senha Incorreta')
                 }
             })
     },
