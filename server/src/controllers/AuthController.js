@@ -4,7 +4,9 @@ const moment = require('moment')
 
 module.exports = {
     async createUser(req, res) {
-        Auth.SignUpWithEmailAndPassword(req.body.email, req.body.password)
+        let { email, password } = req.body
+
+        Auth.SignUpWithEmailAndPassword(email, password)
             .then((user) => {
                 if(!user.err){
                     User.createUser(user.user.uid, user.user.email, new Date())
@@ -24,7 +26,10 @@ module.exports = {
     },
 
     async login(req, res) {
-        Auth.SignInWithEmailAndPassword(req.body.email, req.body.password)
+        let { email, password } = req.body
+        console.log(email)
+
+        Auth.SignInWithEmailAndPassword(email, password)
             .then((login) => {
                 if(!login.err){
                     User.createJWT(login.user.uid, login.user.email)

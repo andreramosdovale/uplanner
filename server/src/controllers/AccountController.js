@@ -54,6 +54,8 @@ module.exports = {
     async listAccount(req, res) {
         const token = req.headers.authorization
 
+        console.log('token -> ', token)
+
         let raw_token = token.replace('Bearer ','')
 
         jwt.verify(raw_token, SECRET, async function(err, decoded) {
